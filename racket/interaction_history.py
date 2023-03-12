@@ -10,9 +10,8 @@ _DB_DIR = 'data/'
 _DB_NAME = 'interaction_history.db'
 _TABLE_NAME = 'interaction_history'
 
-__all__ = (
-    'InteractionHistory',
-)
+__all__ = ('InteractionHistory',)
+
 
 class InteractionHistory:
     """Stores a history of ApplicationInteractions."""

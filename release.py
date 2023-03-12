@@ -71,7 +71,7 @@ def main():
     publishing_output = capture_output([
         'hatch', 'publish', '--user=__token__', f'--auth={pypi_settings.TOKEN}'
     ])
-    print(publishing_output)
+    print('\n'.join(publishing_output))
     print('Done!')
 
 

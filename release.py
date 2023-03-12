@@ -57,9 +57,13 @@ def main():
     capture_output(['git', 'push'])
 
     print('Cleaning the build directory...')
-    for path in pathlib.Path('./dist/').glob('*'):
-        if path.is_file() and path.suffixes in (['.whl'], ['.tar', '.gz']):
-            os.remove(path)
+    dist_dir = pathlib.Path('./dist/')
+    to_remove = sorted(
+        list(dist_dir.glob('*.whl')) + list(dist_dir.glob('*.tar.gz')))
+    for path in to_remove:
+        print(f'rm {path}')
+        os.remove(path)
+
     print('Building the release...')
     capture_output(['hatch', 'build'])
 

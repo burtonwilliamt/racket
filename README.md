@@ -1,0 +1,2 @@
+# racket
+Discord bot utilities.

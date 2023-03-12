@@ -1,4 +1,6 @@
 import argparse
+import os
+import pathlib
 import subprocess
 
 import pypi_settings
@@ -54,6 +56,10 @@ def main():
     capture_output(['git', 'commit', '-m', f'"Version {new_version}"'])
     capture_output(['git', 'push'])
 
+    print('Cleaning the build directory...')
+    for path in pathlib.Path('./dist/').glob('*'):
+        if path.is_file() and path.suffixes in (['.whl'], ['.tar', '.gz']):
+            os.remove(path)
     print('Building the release...')
     capture_output(['hatch', 'build'])
 

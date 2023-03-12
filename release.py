@@ -60,6 +60,8 @@ def main():
     print('Publishing...')
     capture_output(
         ['hatch', 'publish', '--user=__token__', f'--auth={pypi_settings.TOKEN}'])
+    print(capture_output)
+    print('Done!')
 
 
 if __name__ == '__main__':

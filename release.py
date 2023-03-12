@@ -58,9 +58,10 @@ def main():
     capture_output(['hatch', 'build'])
 
     print('Publishing...')
-    capture_output(
-        ['hatch', 'publish', '--user=__token__', f'--auth={pypi_settings.TOKEN}'])
-    print(capture_output)
+    publishing_output = capture_output([
+        'hatch', 'publish', '--user=__token__', f'--auth={pypi_settings.TOKEN}'
+    ])
+    print(publishing_output)
     print('Done!')
 
 

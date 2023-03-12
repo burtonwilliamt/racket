@@ -1,4 +1,5 @@
 """Utility for running a cog. See run_cog docstring for more details."""
+import argparse
 from collections.abc import Sequence
 import logging
 from typing import Type
@@ -8,8 +9,14 @@ from racket import setup_logging, RacketBot
 import discord
 import discord.ext.commands
 
-
 __all__ = ('run_cog',)
+
+parser = argparse.ArgumentParser(description='Run a configured bot Cog.')
+parser.add_argument(
+    '--sync_commands',
+    action='store_true',
+    help='Force sync the discord commands. Do this when you added a new command, '
+    'or changed the name/args/desription of a command.')
 
 
 def run_cog(cog_class: Type[discord.ext.commands.Cog],
@@ -40,13 +47,17 @@ def run_cog(cog_class: Type[discord.ext.commands.Cog],
     setup_logging()
     log = logging.getLogger(__name__)
 
+    args = parser.parse_args()
+
     intents = discord.Intents.default()
     intents.typing = False  # pylint: disable=assigning-non-slot
     intents.presences = False  # pylint: disable=assigning-non-slot
     intents.message_content = False  # pylint: disable=assigning-non-slot
 
     log.info('Creating bot object.')
-    bot = RacketBot(intents=intents, guild_ids=guilds)
+    bot = RacketBot(intents=intents,
+                    guild_ids=guilds,
+                    force_command_sync=args.sync_commands)
 
     log.info('Adding custom commands.')
     bot.add_cog(cog_class(bot))

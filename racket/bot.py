@@ -1,3 +1,5 @@
+import inspect
+
 import discord
 import discord.ext.commands
 from discord import app_commands
@@ -49,6 +51,18 @@ class RacketBot(discord.Client):
             if name not in self.extra_events:
                 self.extra_events[name] = []
             self.extra_events[name].append(listener)
+
+        for name, bound_method in inspect.getmembers(
+                cog, predicate=inspect.ismethod):
+            if not hasattr(bound_method, '__cog_context_menu_args__'):
+                continue
+            args, kwargs = bound_method.__cog_context_menu_args__
+            if 'name' not in kwargs:
+                kwargs['name'] = bound_method.__name__
+            self.tree.add_command(
+                discord.app_commands.ContextMenu(*args,
+                                                 **kwargs,
+                                                 callback=bound_method))
 
     # Client does not support extra listeners very well. This is a copy of
     # discord.ext.commands.Bot.dispatch which mostly just calls super() but will
